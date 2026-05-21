@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import "./App.css";
 
 const topics = [
@@ -34,12 +34,6 @@ const topics = [
     risk: 35,
     position: "node-pos-4",
   },
-];
-
-const todayPlan = [
-  "Revise one Array problem to refresh old memory.",
-  "Practice two Hashing problems based on frequency maps.",
-  "Solve one mixed Array + Hashing problem.",
 ];
 
 const recommendedProblems = [
@@ -160,10 +154,114 @@ function getStatusClass(status) {
   return "node-muted";
 }
 
+function buildDailyPlan(workload, situation) {
+  if (situation === "Internal exam / Test") {
+    return [
+      "10 min quick Arrays recall only.",
+      "Skip heavy problem solving today.",
+      "Do one AI-reviewed code reading session after exam prep.",
+    ];
+  }
+
+  if (situation === "Free day" || workload === "Low") {
+    return [
+      "20 min Arrays revision problem.",
+      "40 min Hashing practice with frequency-map problems.",
+      "30 min mixed Array + Hashing challenge.",
+      "10 min AI code review and revision scheduling.",
+    ];
+  }
+
+  if (workload === "High" || situation === "Assignment") {
+    return [
+      "15 min Arrays recall problem only.",
+      "10 min Hashing concept flash revision.",
+      "Save medium-level practice for tomorrow.",
+    ];
+  }
+
+  return [
+    "20 min Arrays revision problem.",
+    "30 min Hashing practice problem.",
+    "10 min AI code review and next revision scheduling.",
+  ];
+}
+
+function calculateMatchScore(problem, workload, situation, weakConcept, goal) {
+  let score = 62;
+
+  if (problem.tags.includes("Hashing")) score += 12;
+  if (problem.tags.includes("Array")) score += 10;
+  if (problem.tags.includes(weakConcept)) score += 16;
+
+  if (goal === "Placement Prep") {
+    if (problem.tags.includes("Hashing")) score += 6;
+    if (problem.difficulty === "Medium") score += 4;
+  }
+
+  if (goal === "Beginner DSA") {
+    if (problem.difficulty === "Easy") score += 12;
+    if (problem.difficulty === "Medium") score -= 10;
+  }
+
+  if (goal === "Competitive Programming") {
+    if (problem.difficulty === "Medium") score += 12;
+    if (problem.tags.includes("Prefix Sum")) score += 8;
+  }
+
+  if (goal === "Internship Prep") {
+    if (problem.difficulty === "Easy") score += 5;
+    if (problem.difficulty === "Medium") score += 5;
+  }
+
+  if (workload === "High" || situation === "Internal exam / Test") {
+    if (problem.difficulty === "Easy") score += 8;
+    if (problem.difficulty === "Medium") score -= 18;
+  }
+
+  if (workload === "Low" || situation === "Free day") {
+    if (problem.difficulty === "Medium") score += 10;
+  }
+
+  if (situation === "Assignment" || situation === "Project work") {
+    if (problem.difficulty === "Easy") score += 6;
+    if (problem.difficulty === "Medium") score -= 8;
+  }
+
+  return Math.max(45, Math.min(score, 98));
+}
+
 function App() {
   const [selectedProblem, setSelectedProblem] = useState(recommendedProblems[0]);
   const [userCode, setUserCode] = useState(recommendedProblems[0].code);
   const [reviewGenerated, setReviewGenerated] = useState(false);
+
+  const [collegeSchedule, setCollegeSchedule] = useState("9 AM - 4 PM");
+  const [availableTime, setAvailableTime] = useState("1 hour");
+  const [workload, setWorkload] = useState("Medium");
+  const [situation, setSituation] = useState("Normal day");
+  const [weakConcept, setWeakConcept] = useState("Prefix Sum");
+  const [goal, setGoal] = useState("Placement Prep");
+
+  const todayPlan = useMemo(
+    () => buildDailyPlan(workload, situation),
+    [workload, situation]
+  );
+
+  const scoredProblems = useMemo(() => {
+    return recommendedProblems
+      .map((problem) => ({
+        ...problem,
+        matchScore: calculateMatchScore(
+          problem,
+          workload,
+          situation,
+          weakConcept,
+          goal
+        ),
+      }))
+      .sort((a, b) => b.matchScore - a.matchScore);
+  }, [workload, situation, weakConcept, goal]);
 
   function handlePracticeHere(problem) {
     setSelectedProblem(problem);
@@ -190,6 +288,111 @@ function App() {
         <div className="hero-badge">
           <span>Today</span>
           <strong>Arrays revision is due</strong>
+        </div>
+      </section>
+
+      <section className="schedule-panel">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Smart Schedule Setup</p>
+            <h2>Personalize today’s DSA load</h2>
+          </div>
+          <span className="live-pill">Daily Check-in</span>
+        </div>
+
+        <div className="schedule-grid">
+          <div className="setup-card">
+            <label>College schedule</label>
+            <input
+              value={collegeSchedule}
+              onChange={(event) => setCollegeSchedule(event.target.value)}
+            />
+          </div>
+
+          <div className="setup-card">
+            <label>Available DSA time</label>
+            <select
+              value={availableTime}
+              onChange={(event) => setAvailableTime(event.target.value)}
+            >
+              <option>30 minutes</option>
+              <option>1 hour</option>
+              <option>1.5 hours</option>
+              <option>2+ hours</option>
+            </select>
+          </div>
+
+          <div className="setup-card">
+            <label>Today’s workload</label>
+            <select
+              value={workload}
+              onChange={(event) => setWorkload(event.target.value)}
+            >
+              <option>Low</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
+          </div>
+
+          <div className="setup-card">
+            <label>Special situation today</label>
+            <select
+              value={situation}
+              onChange={(event) => setSituation(event.target.value)}
+            >
+              <option>Normal day</option>
+              <option>Assignment</option>
+              <option>Internal exam / Test</option>
+              <option>Project work</option>
+              <option>Event / Hackathon</option>
+              <option>Free day</option>
+            </select>
+          </div>
+
+          <div className="setup-card">
+            <label>Weak concept</label>
+            <select
+              value={weakConcept}
+              onChange={(event) => setWeakConcept(event.target.value)}
+            >
+              <option>Prefix Sum</option>
+              <option>Recursion</option>
+              <option>Binary Search</option>
+              <option>Sliding Window</option>
+              <option>Dynamic Programming</option>
+              <option>Graphs</option>
+            </select>
+          </div>
+
+          <div className="setup-card">
+            <label>Goal</label>
+            <select value={goal} onChange={(event) => setGoal(event.target.value)}>
+              <option>Beginner DSA</option>
+              <option>College Practice</option>
+              <option>Internship Prep</option>
+              <option>Placement Prep</option>
+              <option>Competitive Programming</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="profile-summary">
+          <div>
+            <span>Current topic</span>
+            <strong>Hashing</strong>
+          </div>
+          <div>
+            <span>Completed topic</span>
+            <strong>Arrays</strong>
+          </div>
+          <div>
+            <span>Weak concept</span>
+            <strong>{weakConcept}</strong>
+          </div>
+          <div>
+            <span>Goal</span>
+            <strong>{goal}</strong>
+          </div>
         </div>
       </section>
 
@@ -257,10 +460,10 @@ function App() {
           <h2>Why revise Arrays today?</h2>
 
           <p>
-            You are currently learning Hashing, but Arrays was last practiced 8
-            days ago. Since Hashing problems often combine array traversal with
-            frequency maps, revising Arrays now will strengthen your current
-            topic too.
+            Your college schedule is {collegeSchedule}, and today is marked as a{" "}
+            {workload.toLowerCase()} workload day. Since Arrays was last
+            practiced 8 days ago, the plan is adjusted to revise it without
+            overloading you.
           </p>
 
           <div className="decay-meter">
@@ -281,7 +484,11 @@ function App() {
 
           <div className="mentor-insight">
             <span>Recommendation</span>
-            <strong>Solve 1 Array recall + 1 Array-Hashing mixed problem</strong>
+            <strong>
+              {workload === "High"
+                ? "Do light revision only today"
+                : "Solve 1 Array recall + 1 Array-Hashing mixed problem"}
+            </strong>
           </div>
 
           <div className="mentor-actions">
@@ -341,11 +548,11 @@ function App() {
             <p className="eyebrow">Recommended Problem Bank</p>
             <h2>What should you solve next?</h2>
           </div>
-          <span className="live-pill">Selected by Recall Engine</span>
+          <span className="live-pill">Dynamic Recall Score</span>
         </div>
 
         <div className="problem-grid">
-          {recommendedProblems.map((problem) => (
+          {scoredProblems.map((problem) => (
             <article
               className={`recommend-card ${selectedProblem.id === problem.id ? "selected-problem" : ""
                 }`}
@@ -356,7 +563,7 @@ function App() {
                   <span className="difficulty-pill">{problem.difficulty}</span>
                   <h3>{problem.title}</h3>
                 </div>
-                <span className="match-score">92% Match</span>
+                <span className="match-score">{problem.matchScore}% Match</span>
               </div>
 
               <div className="tag-row">
@@ -366,6 +573,14 @@ function App() {
               </div>
 
               <p>{problem.reason}</p>
+
+              <div className="score-reason">
+                <span>Why this score?</span>
+                <p>
+                  Based on workload, goal, weak topic, difficulty, and topic
+                  match.
+                </p>
+              </div>
 
               <div className="recommend-actions">
                 <a href={problem.link} target="_blank" rel="noreferrer">

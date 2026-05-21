@@ -21,6 +21,7 @@ body {
 }
 
 .hero-panel,
+.schedule-panel,
 .stat-card,
 .memory-card,
 .mentor-panel,
@@ -103,6 +104,75 @@ h3 {
 .hero-badge strong {
   color: #fef3c7;
   font-size: 22px;
+}
+
+.schedule-panel {
+  padding: 26px;
+  margin-bottom: 22px;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.setup-card {
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(2, 6, 23, 0.48);
+  border: 1px solid rgba(148, 163, 184, 0.13);
+}
+
+.setup-card label {
+  display: block;
+  color: #94a3b8;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.setup-card input,
+.setup-card select {
+  width: 100%;
+  border: 1px solid rgba(103, 232, 249, 0.18);
+  outline: none;
+  border-radius: 14px;
+  padding: 12px;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.92);
+  font-weight: 800;
+}
+
+.setup-card select option {
+  background: #0f172a;
+}
+
+.profile-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.profile-summary div {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(34, 211, 238, 0.06);
+  border: 1px solid rgba(34, 211, 238, 0.13);
+}
+
+.profile-summary span {
+  display: block;
+  color: #94a3b8;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.profile-summary strong {
+  color: #e0f2fe;
 }
 
 .stats-grid {
@@ -517,6 +587,30 @@ h3 {
   min-height: 88px;
 }
 
+.score-reason {
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  background: rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.score-reason span {
+  display: block;
+  color: #67e8f9;
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.score-reason p {
+  min-height: auto;
+  margin: 0;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .recommend-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -763,7 +857,9 @@ code {
   .main-grid,
   .bottom-grid,
   .workspace-grid,
-  .problem-grid {
+  .problem-grid,
+  .schedule-grid,
+  .profile-summary {
     grid-template-columns: 1fr;
   }
 
