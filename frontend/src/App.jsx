@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 
 const topics = [
@@ -43,32 +44,17 @@ const todayPlan = [
 
 const recommendedProblems = [
   {
+    id: 1,
     title: "Two Sum",
     difficulty: "Easy",
     tags: ["Array", "Hashing"],
     reason:
       "Best mixed revision problem because it refreshes Array traversal while strengthening Hash Map lookup.",
     link: "https://leetcode.com/problems/two-sum/",
-  },
-  {
-    title: "Contains Duplicate",
-    difficulty: "Easy",
-    tags: ["Array", "Set"],
-    reason:
-      "Good quick recall problem for Arrays and introduces HashSet based duplicate detection.",
-    link: "https://leetcode.com/problems/contains-duplicate/",
-  },
-  {
-    title: "Subarray Sum Equals K",
-    difficulty: "Medium",
-    tags: ["Prefix Sum", "Hashing"],
-    reason:
-      "Recommended because Prefix Sum is marked weak and this problem connects it with Hashing.",
-    link: "https://leetcode.com/problems/subarray-sum-equals-k/",
-  },
-];
-
-const sampleCode = `function twoSum(nums, target) {
+    statement:
+      "Given an array of integers and a target value, return the indices of two numbers such that they add up to the target.",
+    sample: "nums = [2, 7, 11, 15], target = 9 → [0, 1]",
+    code: `function twoSum(nums, target) {
   const seen = new Map();
 
   for (let i = 0; i < nums.length; i++) {
@@ -80,7 +66,92 @@ const sampleCode = `function twoSum(nums, target) {
 
     seen.set(nums[i], i);
   }
-}`;
+}`,
+    review: {
+      clarity: "Good",
+      pattern: "Hash Map Lookup",
+      time: "O(n)",
+      space: "O(n)",
+      edge: "Duplicate values",
+      note:
+        "Your logic is optimized. Next, solve one variation where the array contains repeated numbers to check whether your hashing concept is stable.",
+    },
+  },
+  {
+    id: 2,
+    title: "Contains Duplicate",
+    difficulty: "Easy",
+    tags: ["Array", "Set"],
+    reason:
+      "Good quick recall problem for Arrays and introduces HashSet based duplicate detection.",
+    link: "https://leetcode.com/problems/contains-duplicate/",
+    statement:
+      "Given an integer array, return true if any value appears at least twice, and return false if every element is distinct.",
+    sample: "nums = [1, 2, 3, 1] → true",
+    code: `function containsDuplicate(nums) {
+  const seen = new Set();
+
+  for (const num of nums) {
+    if (seen.has(num)) {
+      return true;
+    }
+
+    seen.add(num);
+  }
+
+  return false;
+}`,
+    review: {
+      clarity: "Strong",
+      pattern: "HashSet Tracking",
+      time: "O(n)",
+      space: "O(n)",
+      edge: "Empty array",
+      note:
+        "This is a strong recall problem. It checks whether you remember array traversal and can apply set-based duplicate detection cleanly.",
+    },
+  },
+  {
+    id: 3,
+    title: "Subarray Sum Equals K",
+    difficulty: "Medium",
+    tags: ["Prefix Sum", "Hashing"],
+    reason:
+      "Recommended because Prefix Sum is marked weak and this problem connects it with Hashing.",
+    link: "https://leetcode.com/problems/subarray-sum-equals-k/",
+    statement:
+      "Given an array of integers and an integer k, return the total number of continuous subarrays whose sum equals k.",
+    sample: "nums = [1, 1, 1], k = 2 → 2",
+    code: `function subarraySum(nums, k) {
+  const prefixCount = new Map();
+  prefixCount.set(0, 1);
+
+  let sum = 0;
+  let count = 0;
+
+  for (const num of nums) {
+    sum += num;
+
+    if (prefixCount.has(sum - k)) {
+      count += prefixCount.get(sum - k);
+    }
+
+    prefixCount.set(sum, (prefixCount.get(sum) || 0) + 1);
+  }
+
+  return count;
+}`,
+    review: {
+      clarity: "Needs Revision",
+      pattern: "Prefix Sum + Hash Map",
+      time: "O(n)",
+      space: "O(n)",
+      edge: "Negative numbers",
+      note:
+        "This problem is important because normal sliding window may fail with negative numbers. Prefix sum with hash map is the correct pattern to revise.",
+    },
+  },
+];
 
 function getStatusClass(status) {
   if (status === "Active") return "node-active";
@@ -90,6 +161,8 @@ function getStatusClass(status) {
 }
 
 function App() {
+  const [selectedProblem, setSelectedProblem] = useState(recommendedProblems[0]);
+
   return (
     <main className="app-shell">
       <section className="hero-panel">
@@ -261,7 +334,11 @@ function App() {
 
         <div className="problem-grid">
           {recommendedProblems.map((problem) => (
-            <article className="recommend-card" key={problem.title}>
+            <article
+              className={`recommend-card ${selectedProblem.id === problem.id ? "selected-problem" : ""
+                }`}
+              key={problem.title}
+            >
               <div className="recommend-top">
                 <div>
                   <span className="difficulty-pill">{problem.difficulty}</span>
@@ -282,7 +359,9 @@ function App() {
                 <a href={problem.link} target="_blank" rel="noreferrer">
                   Open on LeetCode
                 </a>
-                <button>Practice Here</button>
+                <button onClick={() => setSelectedProblem(problem)}>
+                  Practice Here
+                </button>
               </div>
             </article>
           ))}
@@ -293,37 +372,33 @@ function App() {
         <div className="section-head">
           <div>
             <p className="eyebrow">Practice Workspace</p>
-            <h2>LeetCode-style AI Solving Companion</h2>
+            <h2>{selectedProblem.title} · AI Solving Companion</h2>
           </div>
-          <span className="live-pill">Prototype Mode</span>
+          <span className="live-pill">Live Selected Problem</span>
         </div>
 
         <div className="workspace-grid">
           <div className="problem-card">
             <div className="problem-top">
               <div>
-                <span className="difficulty-pill">Easy</span>
-                <h3>Two Sum</h3>
+                <span className="difficulty-pill">
+                  {selectedProblem.difficulty}
+                </span>
+                <h3>{selectedProblem.title}</h3>
               </div>
-              <span className="topic-tag">Array + Hashing</span>
+              <span className="topic-tag">{selectedProblem.tags.join(" + ")}</span>
             </div>
 
-            <p>
-              Given an array of integers and a target value, return the indices
-              of two numbers such that they add up to the target.
-            </p>
+            <p>{selectedProblem.statement}</p>
 
             <div className="problem-detail">
               <span>Why this problem?</span>
-              <p>
-                It connects your old Array traversal concept with your current
-                Hashing topic, making it perfect for revision.
-              </p>
+              <p>{selectedProblem.reason}</p>
             </div>
 
             <div className="test-box">
               <span>Sample</span>
-              <code>nums = [2, 7, 11, 15], target = 9 → [0, 1]</code>
+              <code>{selectedProblem.sample}</code>
             </div>
           </div>
 
@@ -334,43 +409,39 @@ function App() {
             </div>
 
             <pre>
-              <code>{sampleCode}</code>
+              <code>{selectedProblem.code}</code>
             </pre>
           </div>
 
           <div className="review-card">
             <p className="eyebrow">AI Review Preview</p>
-            <h3>Concept clarity: Good</h3>
+            <h3>Concept clarity: {selectedProblem.review.clarity}</h3>
 
             <div className="review-list">
               <div>
                 <span>Pattern detected</span>
-                <strong>Hash Map Lookup</strong>
+                <strong>{selectedProblem.review.pattern}</strong>
               </div>
 
               <div>
                 <span>Time complexity</span>
-                <strong>O(n)</strong>
+                <strong>{selectedProblem.review.time}</strong>
               </div>
 
               <div>
                 <span>Space complexity</span>
-                <strong>O(n)</strong>
+                <strong>{selectedProblem.review.space}</strong>
               </div>
 
               <div>
                 <span>Edge case to revise</span>
-                <strong>Duplicate values</strong>
+                <strong>{selectedProblem.review.edge}</strong>
               </div>
             </div>
 
             <div className="ai-note">
               <span>AI Mentor Note</span>
-              <p>
-                Your logic is optimized. Next, solve one variation where the
-                array contains repeated numbers to check whether your hashing
-                concept is stable.
-              </p>
+              <p>{selectedProblem.review.note}</p>
             </div>
 
             <button className="secondary-btn">Add Similar Problem to Revision</button>
