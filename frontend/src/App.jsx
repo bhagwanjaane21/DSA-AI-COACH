@@ -158,6 +158,13 @@ function App() {
             <strong>Solve 1 Array recall + 1 Array-Hashing mixed problem</strong>
           </div>
 
+          <div className="mentor-actions">
+            <button>Analyze Pattern</button>
+            <button>Review Code</button>
+            <button>Schedule Revision</button>
+            <button>Next Problem</button>
+          </div>
+
           <button className="primary-btn">Generate Today’s Practice</button>
         </aside>
       </section>
