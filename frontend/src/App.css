@@ -25,7 +25,11 @@ body {
 .memory-card,
 .mentor-panel,
 .plan-card,
-.queue-card {
+.queue-card,
+.workspace-panel,
+.problem-card,
+.code-card,
+.review-card {
   border: 1px solid rgba(148, 163, 184, 0.18);
   background: linear-gradient(145deg,
       rgba(15, 23, 42, 0.86),
@@ -63,6 +67,11 @@ h1 {
 h2 {
   margin: 0;
   letter-spacing: -0.04em;
+}
+
+h3 {
+  margin: 0;
+  letter-spacing: -0.03em;
 }
 
 .subtitle {
@@ -129,7 +138,11 @@ h2 {
 .memory-card,
 .mentor-panel,
 .plan-card,
-.queue-card {
+.queue-card,
+.workspace-panel,
+.problem-card,
+.code-card,
+.review-card {
   padding: 26px;
 }
 
@@ -360,7 +373,8 @@ h2 {
   box-shadow: 0 10px 24px rgba(34, 211, 238, 0.08);
 }
 
-.primary-btn {
+.primary-btn,
+.secondary-btn {
   width: 100%;
   border: 0;
   padding: 15px 18px;
@@ -371,10 +385,17 @@ h2 {
   cursor: pointer;
 }
 
+.secondary-btn {
+  color: #e2e8f0;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.24);
+}
+
 .bottom-grid {
   display: grid;
   grid-template-columns: 1.35fr 0.8fr;
   gap: 22px;
+  margin-bottom: 22px;
 }
 
 .task-list {
@@ -417,11 +438,137 @@ h2 {
   color: #fda4af;
 }
 
+.workspace-panel {
+  margin-top: 22px;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.2fr 0.9fr;
+  gap: 18px;
+}
+
+.problem-top,
+.code-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.difficulty-pill,
+.topic-tag {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.topic-tag {
+  color: #fef3c7;
+  background: rgba(250, 204, 21, 0.1);
+  border-color: rgba(250, 204, 21, 0.24);
+}
+
+.problem-card p,
+.review-card p {
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.problem-detail,
+.test-box,
+.ai-note {
+  padding: 16px;
+  margin-top: 16px;
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.54);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.problem-detail span,
+.test-box span,
+.ai-note span,
+.code-head span {
+  display: block;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.test-box code {
+  color: #e2e8f0;
+  white-space: normal;
+}
+
+.code-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.code-head {
+  padding: 20px 22px 0;
+}
+
+.code-head strong {
+  color: #67e8f9;
+}
+
+pre {
+  margin: 0;
+  min-height: 360px;
+  padding: 22px;
+  overflow: auto;
+  background:
+    linear-gradient(rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+    rgba(2, 6, 23, 0.74);
+  background-size: 34px 34px;
+}
+
+code {
+  font-family: "Cascadia Code", Consolas, monospace;
+  color: #dbeafe;
+  line-height: 1.7;
+}
+
+.review-list {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.review-list div {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(2, 6, 23, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.review-list span {
+  display: block;
+  color: #94a3b8;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.review-list strong {
+  color: #f8fafc;
+}
+
 @media (max-width: 1100px) {
 
   .stats-grid,
   .main-grid,
-  .bottom-grid {
+  .bottom-grid,
+  .workspace-grid {
     grid-template-columns: 1fr;
   }
 

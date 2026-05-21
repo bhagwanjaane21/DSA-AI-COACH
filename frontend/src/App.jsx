@@ -41,6 +41,20 @@ const todayPlan = [
   "Solve one mixed Array + Hashing problem.",
 ];
 
+const sampleCode = `function twoSum(nums, target) {
+  const seen = new Map();
+
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+
+    if (seen.has(need)) {
+      return [seen.get(need), i];
+    }
+
+    seen.set(nums[i], i);
+  }
+}`;
+
 function getStatusClass(status) {
   if (status === "Active") return "node-active";
   if (status === "Revision Due") return "node-danger";
@@ -205,6 +219,95 @@ function App() {
           <div className="queue-item">
             <span>Prefix Sum</span>
             <strong>28% Risk</strong>
+          </div>
+        </div>
+      </section>
+
+      <section className="workspace-panel">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Practice Workspace</p>
+            <h2>LeetCode-style AI Solving Companion</h2>
+          </div>
+          <span className="live-pill">Prototype Mode</span>
+        </div>
+
+        <div className="workspace-grid">
+          <div className="problem-card">
+            <div className="problem-top">
+              <div>
+                <span className="difficulty-pill">Easy</span>
+                <h3>Two Sum</h3>
+              </div>
+              <span className="topic-tag">Array + Hashing</span>
+            </div>
+
+            <p>
+              Given an array of integers and a target value, return the indices
+              of two numbers such that they add up to the target.
+            </p>
+
+            <div className="problem-detail">
+              <span>Why this problem?</span>
+              <p>
+                It connects your old Array traversal concept with your current
+                Hashing topic, making it perfect for revision.
+              </p>
+            </div>
+
+            <div className="test-box">
+              <span>Sample</span>
+              <code>nums = [2, 7, 11, 15], target = 9 → [0, 1]</code>
+            </div>
+          </div>
+
+          <div className="code-card">
+            <div className="code-head">
+              <span>Student Code</span>
+              <strong>JavaScript</strong>
+            </div>
+
+            <pre>
+              <code>{sampleCode}</code>
+            </pre>
+          </div>
+
+          <div className="review-card">
+            <p className="eyebrow">AI Review Preview</p>
+            <h3>Concept clarity: Good</h3>
+
+            <div className="review-list">
+              <div>
+                <span>Pattern detected</span>
+                <strong>Hash Map Lookup</strong>
+              </div>
+
+              <div>
+                <span>Time complexity</span>
+                <strong>O(n)</strong>
+              </div>
+
+              <div>
+                <span>Space complexity</span>
+                <strong>O(n)</strong>
+              </div>
+
+              <div>
+                <span>Edge case to revise</span>
+                <strong>Duplicate values</strong>
+              </div>
+            </div>
+
+            <div className="ai-note">
+              <span>AI Mentor Note</span>
+              <p>
+                Your logic is optimized. Next, solve one variation where the
+                array contains repeated numbers to check whether your hashing
+                concept is stable.
+              </p>
+            </div>
+
+            <button className="secondary-btn">Add Similar Problem to Revision</button>
           </div>
         </div>
       </section>
