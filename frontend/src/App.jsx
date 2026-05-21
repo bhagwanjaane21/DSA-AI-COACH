@@ -41,6 +41,33 @@ const todayPlan = [
   "Solve one mixed Array + Hashing problem.",
 ];
 
+const recommendedProblems = [
+  {
+    title: "Two Sum",
+    difficulty: "Easy",
+    tags: ["Array", "Hashing"],
+    reason:
+      "Best mixed revision problem because it refreshes Array traversal while strengthening Hash Map lookup.",
+    link: "https://leetcode.com/problems/two-sum/",
+  },
+  {
+    title: "Contains Duplicate",
+    difficulty: "Easy",
+    tags: ["Array", "Set"],
+    reason:
+      "Good quick recall problem for Arrays and introduces HashSet based duplicate detection.",
+    link: "https://leetcode.com/problems/contains-duplicate/",
+  },
+  {
+    title: "Subarray Sum Equals K",
+    difficulty: "Medium",
+    tags: ["Prefix Sum", "Hashing"],
+    reason:
+      "Recommended because Prefix Sum is marked weak and this problem connects it with Hashing.",
+    link: "https://leetcode.com/problems/subarray-sum-equals-k/",
+  },
+];
+
 const sampleCode = `function twoSum(nums, target) {
   const seen = new Map();
 
@@ -220,6 +247,45 @@ function App() {
             <span>Prefix Sum</span>
             <strong>28% Risk</strong>
           </div>
+        </div>
+      </section>
+
+      <section className="recommend-panel">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Recommended Problem Bank</p>
+            <h2>What should you solve next?</h2>
+          </div>
+          <span className="live-pill">Selected by Recall Engine</span>
+        </div>
+
+        <div className="problem-grid">
+          {recommendedProblems.map((problem) => (
+            <article className="recommend-card" key={problem.title}>
+              <div className="recommend-top">
+                <div>
+                  <span className="difficulty-pill">{problem.difficulty}</span>
+                  <h3>{problem.title}</h3>
+                </div>
+                <span className="match-score">92% Match</span>
+              </div>
+
+              <div className="tag-row">
+                {problem.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+
+              <p>{problem.reason}</p>
+
+              <div className="recommend-actions">
+                <a href={problem.link} target="_blank" rel="noreferrer">
+                  Open on LeetCode
+                </a>
+                <button>Practice Here</button>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
