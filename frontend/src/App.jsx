@@ -162,6 +162,18 @@ function getStatusClass(status) {
 
 function App() {
   const [selectedProblem, setSelectedProblem] = useState(recommendedProblems[0]);
+  const [userCode, setUserCode] = useState(recommendedProblems[0].code);
+  const [reviewGenerated, setReviewGenerated] = useState(false);
+
+  function handlePracticeHere(problem) {
+    setSelectedProblem(problem);
+    setUserCode(problem.code);
+    setReviewGenerated(false);
+  }
+
+  function handleReviewCode() {
+    setReviewGenerated(true);
+  }
 
   return (
     <main className="app-shell">
@@ -274,7 +286,7 @@ function App() {
 
           <div className="mentor-actions">
             <button>Analyze Pattern</button>
-            <button>Review Code</button>
+            <button onClick={handleReviewCode}>Review Code</button>
             <button>Schedule Revision</button>
             <button>Next Problem</button>
           </div>
@@ -359,7 +371,7 @@ function App() {
                 <a href={problem.link} target="_blank" rel="noreferrer">
                   Open on LeetCode
                 </a>
-                <button onClick={() => setSelectedProblem(problem)}>
+                <button onClick={() => handlePracticeHere(problem)}>
                   Practice Here
                 </button>
               </div>
@@ -374,7 +386,7 @@ function App() {
             <p className="eyebrow">Practice Workspace</p>
             <h2>{selectedProblem.title} · AI Solving Companion</h2>
           </div>
-          <span className="live-pill">Live Selected Problem</span>
+          <span className="live-pill">Editable Code Review</span>
         </div>
 
         <div className="workspace-grid">
@@ -386,7 +398,9 @@ function App() {
                 </span>
                 <h3>{selectedProblem.title}</h3>
               </div>
-              <span className="topic-tag">{selectedProblem.tags.join(" + ")}</span>
+              <span className="topic-tag">
+                {selectedProblem.tags.join(" + ")}
+              </span>
             </div>
 
             <p>{selectedProblem.statement}</p>
@@ -402,49 +416,87 @@ function App() {
             </div>
           </div>
 
-          <div className="code-card">
+          <div className="code-card editable-code-card">
             <div className="code-head">
-              <span>Student Code</span>
+              <span>Paste / Edit Your Code</span>
               <strong>JavaScript</strong>
             </div>
 
-            <pre>
-              <code>{selectedProblem.code}</code>
-            </pre>
+            <textarea
+              className="code-editor"
+              value={userCode}
+              onChange={(event) => {
+                setUserCode(event.target.value);
+                setReviewGenerated(false);
+              }}
+              spellCheck="false"
+            />
+
+            <div className="code-actions">
+              <button onClick={handleReviewCode}>Review Code</button>
+              <button
+                onClick={() => {
+                  setUserCode(selectedProblem.code);
+                  setReviewGenerated(false);
+                }}
+              >
+                Reset Sample
+              </button>
+            </div>
           </div>
 
-          <div className="review-card">
+          <div className={`review-card ${reviewGenerated ? "review-ready" : ""}`}>
             <p className="eyebrow">AI Review Preview</p>
-            <h3>Concept clarity: {selectedProblem.review.clarity}</h3>
+            <h3>
+              {reviewGenerated
+                ? `Review generated: ${selectedProblem.review.clarity}`
+                : "Waiting for code review"}
+            </h3>
 
-            <div className="review-list">
-              <div>
-                <span>Pattern detected</span>
-                <strong>{selectedProblem.review.pattern}</strong>
+            {!reviewGenerated && (
+              <div className="empty-review">
+                <span>Paste your solution</span>
+                <p>
+                  Click Review Code to simulate how the AI mentor will analyze
+                  pattern, complexity, edge cases, and revision needs.
+                </p>
               </div>
+            )}
 
-              <div>
-                <span>Time complexity</span>
-                <strong>{selectedProblem.review.time}</strong>
-              </div>
+            {reviewGenerated && (
+              <>
+                <div className="review-list">
+                  <div>
+                    <span>Pattern detected</span>
+                    <strong>{selectedProblem.review.pattern}</strong>
+                  </div>
 
-              <div>
-                <span>Space complexity</span>
-                <strong>{selectedProblem.review.space}</strong>
-              </div>
+                  <div>
+                    <span>Time complexity</span>
+                    <strong>{selectedProblem.review.time}</strong>
+                  </div>
 
-              <div>
-                <span>Edge case to revise</span>
-                <strong>{selectedProblem.review.edge}</strong>
-              </div>
-            </div>
+                  <div>
+                    <span>Space complexity</span>
+                    <strong>{selectedProblem.review.space}</strong>
+                  </div>
 
-            <div className="ai-note">
-              <span>AI Mentor Note</span>
-              <p>{selectedProblem.review.note}</p>
-            </div>
+                  <div>
+                    <span>Edge case to revise</span>
+                    <strong>{selectedProblem.review.edge}</strong>
+                  </div>
+                </div>
 
-            <button className="secondary-btn">Add Similar Problem to Revision</button>
+                <div className="ai-note">
+                  <span>AI Mentor Note</span>
+                  <p>{selectedProblem.review.note}</p>
+                </div>
+
+                <button className="secondary-btn">
+                  Add Similar Problem to Revision
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
