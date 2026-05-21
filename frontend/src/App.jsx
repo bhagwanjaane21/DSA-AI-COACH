@@ -645,6 +645,9 @@ function App() {
                 Arrays has entered the revision zone. A quick recall task today
                 can prevent concept fading.
               </p>
+              <p className="sm2-note">
+                Powered by SM-2 style spaced repetition logic.
+              </p>
             </div>
 
             <div className="mentor-insight">
@@ -739,7 +742,7 @@ function App() {
                 </div>
               </div>
               <p className="reminder-desc">
-                Sends revision reminders when memory decay crosses the threshold. Works directly in the browser without any app install.
+                Sends revision reminders when memory decay crosses the threshold. Works directly in the browser without any app install. Browser reminders can later be scheduled through Firebase Cloud Messaging.
               </p>
               <button
                 className={`reminder-btn ${reminderStatus === "Enabled" ? "reminder-btn-success" : reminderStatus === "Blocked" ? "reminder-btn-blocked" : ""}`}
@@ -986,6 +989,9 @@ function App() {
                       <span className="wi-dot" />
                     </div>
                   </div>
+                  <p className="review-proto-note">
+                    Prototype uses mock diagnostics. Production version connects Gemini through FastAPI.
+                  </p>
                 </>
               ) : (
                 <>
