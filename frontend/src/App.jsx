@@ -34,6 +34,7 @@ const topics = [
     position: "node-pos-4",
   },
 ];
+
 const todayPlan = [
   "Revise one Array problem to refresh old memory.",
   "Practice two Hashing problems based on frequency maps.",
@@ -72,16 +73,19 @@ function App() {
           <strong>Hashing</strong>
           <p>Learning for 5 days</p>
         </div>
+
         <div className="stat-card danger">
           <span>Highest Forgetting Risk</span>
           <strong>Arrays · 64%</strong>
           <p>Last practiced 8 days ago</p>
         </div>
+
         <div className="stat-card">
           <span>Consistency Score</span>
           <strong>72%</strong>
           <p>4 active days this week</p>
         </div>
+
         <div className="stat-card">
           <span>Revision Queue</span>
           <strong>3 Topics</strong>
@@ -113,6 +117,7 @@ function App() {
               >
                 <span>{topic.name}</span>
                 <small>{topic.status}</small>
+
                 <div className="mini-bar">
                   <div style={{ width: `${topic.mastery}%` }} />
                 </div>
@@ -124,12 +129,29 @@ function App() {
         <aside className="mentor-panel">
           <p className="eyebrow">AI Mentor</p>
           <h2>Why revise Arrays today?</h2>
+
           <p>
             You are currently learning Hashing, but Arrays was last practiced 8
             days ago. Since Hashing problems often combine array traversal with
             frequency maps, revising Arrays now will strengthen your current
             topic too.
           </p>
+
+          <div className="decay-meter">
+            <div className="decay-top">
+              <span>Memory Decay</span>
+              <strong>64%</strong>
+            </div>
+
+            <div className="decay-track">
+              <div className="decay-fill" />
+            </div>
+
+            <p>
+              Arrays has entered the revision zone. A quick recall task today
+              can prevent concept fading.
+            </p>
+          </div>
 
           <div className="mentor-insight">
             <span>Recommendation</span>
@@ -167,10 +189,12 @@ function App() {
             <span>Arrays</span>
             <strong>64% Risk</strong>
           </div>
+
           <div className="queue-item">
             <span>Binary Search</span>
             <strong>35% Risk</strong>
           </div>
+
           <div className="queue-item">
             <span>Prefix Sum</span>
             <strong>28% Risk</strong>
